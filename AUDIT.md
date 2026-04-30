@@ -18,21 +18,19 @@ L’analyse met en évidence plusieurs points sensibles :
 
 Le résultat dépend d’un calcul interne, potentiellement basé sur des données accessibles.
 Certaines variables influencent directement le résultat, comme :
-une valeur de prédiction (_guess)
-un identifiant de round (_round)
-un paramètre de validation (_nonce)
+- une valeur de prédiction (_guess)
+- un identifiant de round (_round)
+- un paramètre de validation (_nonce)
 
 Le contrat semble également dépendre de sources externes ou semi-prévisibles :
-
-block.timestamp (temps du bloc)
-blockhash (hash du bloc)
-un oracle externe (prix BTC/USD)
+- block.timestamp (temps du bloc)
+- blockhash (hash du bloc)
+- un oracle externe (prix BTC/USD)
 
 Ces éléments peuvent, dans certains cas, être partiellement prévisibles ou manipulables, ce qui représente un point d’intérêt pour une attaque.
 
 L’implémentation repose sur le contrat Drainer.sol, fourni dans le dépôt.
-Lors de la phase de configuration, un problème de compilation a été rencontré en raison de la directive suivante :
-- pragma solidity =0.8.34;
+Lors de la phase de configuration, un problème de compilation a été rencontré en raison de la directive suivante : pragma solidity =0.8.34.
 Cette version spécifique n’étant pas disponible dans mon environnement local, une modification a été nécessaire. La directive a été adaptée comme suit :
 - pragma solidity ^0.8.19;
 Ce changement a permis de rendre le projet compatible avec les versions de compilateur disponibles tout en conservant un comportement équivalent pour les besoins du challenge.
@@ -53,11 +51,12 @@ Deux approches étaient possibles :
 Option A : Script direct
 Interaction simple avec le contrat cible.
 Plus rapide à tester, mais ne permet pas de garantir l’atomicité.
+
 Option B : Contrat Drainer
 Implémentation d’un contrat intermédiaire respectant l’interface imposée.
 Permet de réaliser l’attaque et la distribution des fonds dans une seule transaction.
 
-👉 Le choix s’est porté sur l’option B (contrat Drainer).
+Le choix s’est porté sur l’option B (contrat Drainer).
 
 Ce choix est justifié par les contraintes du sujet, qui imposent une exécution atomique (attaque + distribution). L’utilisation d’un contrat permet de mieux contrôler le déroulement des opérations et de respecter cette exigence.
 
